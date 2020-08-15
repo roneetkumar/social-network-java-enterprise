@@ -16,7 +16,6 @@ public class User {
 	private ArrayList<Post> savedposts  = new ArrayList<>();
 	private ArrayList<User> requests  = new ArrayList<>();
 	
-
 	public User(String fname, String lname, String email, String pass) {
 		this.fname = fname;
 		this.lname = lname;
@@ -108,6 +107,16 @@ public class User {
 	public boolean savePost(String id, PostDBUtil postdb) {	
 		try {
 			postdb.savePost(id,this.email);	
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	public boolean removeSavedPost(String id, PostDBUtil postdb) {	
+		try {
+			postdb.removeSavedPost(id,this.email);	
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -18,7 +18,7 @@ public class PostDBUtil {
 		this.datasource = datasource;
 	}
 	
-	
+				
 	// GET ALL POSTS
 	public ArrayList<Post> getAllPosts() throws Exception{
 		Connection conn = null;
@@ -30,19 +30,25 @@ public class PostDBUtil {
 		
 		try {
 			conn = this.datasource.getConnection();
-			String sql = "SELECT p.*, count(l.postid) as likes from post p LEFT JOIN likes l ON p.id = l.postid GROUP BY p.id";
+			String sql = "SELECT p.*, u.fname, u.lname, count(l.postid) as likes "
+					+ "FROM post p "
+					+ "LEFT JOIN likes l ON p.id = l.postid "
+					+ "JOIN user u ON p.email = u.email "
+					+ "GROUP BY p.id";
+			
 			smt = conn.createStatement();
 			res = smt.executeQuery(sql);
 			
 			while(res.next()) {
 				String postId = Integer.toString(res.getInt("id"));
 				String email = res.getString("email").toString();
+				String username = res.getString("fname") + " " + res.getString("lname");
 				String content = res.getString("content").toString();
 				String image = res.getString("image").toString();
 				String date = res.getString("date").toString();
 				String likes = res.getString("likes").toString();
 				
-				tempPosts.add(new Post(postId, email, content, image, date, likes));	
+				tempPosts.add(new Post(postId, username,email, content, image, date, likes));	
 			}
 		}
 		finally {
@@ -63,7 +69,11 @@ public class PostDBUtil {
 		
 		try {
 			conn = this.datasource.getConnection();
-			String sql = "SELECT p.*, count(l.postid) as likes from post p LEFT JOIN likes l ON p.id = l.postid GROUP BY p.id HAVING email = ?";
+			String sql = "SELECT p.*, u.fname, u.lname, count(l.postid) as likes "
+					+ "FROM post p "
+					+ "LEFT JOIN likes l ON p.id = l.postid "
+					+ "JOIN user u ON p.email = u.email "
+					+ "GROUP BY p.id HAVING p.email = ?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getEmail());
 			res = pstmt.executeQuery();
@@ -71,14 +81,14 @@ public class PostDBUtil {
 			while(res.next()) {
 				String postId = Integer.toString(res.getInt("id"));
 				String email = res.getString("email").toString();
+				String username = res.getString("fname") + " " + res.getString("lname");
 				String content = res.getString("content").toString();
 				String image = res.getString("image").toString();
 				String date = res.getString("date").toString();
 				String likes = res.getString("likes").toString();
-				
-				tempPosts.add(new Post(postId, email, content, image, date,likes));	
+	
+				tempPosts.add(new Post(postId, username,email, content, image, date, likes));		
 			}
-			
 			user.setPosts(tempPosts);
 		}
 		finally {
@@ -98,11 +108,14 @@ public class PostDBUtil {
 		
 		try {
 			conn = this.datasource.getConnection();
-			String sql = "SELECT p.*, count(l.postid) as likes, s.uemail "
+			String sql = "SELECT p.*, u.fname, u.lname, count(l.postid) as likes "
 					+ "FROM post p "
 					+ "LEFT JOIN likes l ON p.id = l.postid "
+					+ "JOIN user u ON p.email = u.email "
 					+ "JOIN savedposts s ON p.id = s.postid "
+					+ "WHERE s.uemail = ? "
 					+ "GROUP BY p.id";
+			
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getEmail());
 			res = pstmt.executeQuery();
@@ -110,15 +123,15 @@ public class PostDBUtil {
 			while(res.next()) {
 				String postId = Integer.toString(res.getInt("id"));
 				String email = res.getString("email").toString();
+				String username = res.getString("fname") + " " + res.getString("lname");
 				String content = res.getString("content").toString();
 				String image = res.getString("image").toString();
 				String date = res.getString("date").toString();
 				String likes = res.getString("likes").toString();
-				
-				tempPosts.add(new Post(postId, email, content, image, date,likes));	
+				tempPosts.add(new Post(postId, username,email, content, image, date, likes));
 			}
 			
-			user.setPosts(tempPosts);
+			user.setSavedPosts(tempPosts);
 		}
 		finally {
 			close(conn,smt,pstmt,res);
@@ -143,7 +156,9 @@ public class PostDBUtil {
 		try {
 			conn = this.datasource.getConnection();
 			
-			String sql = String.format("INSERT INTO post (email, content, image, date) VALUES ('%s', '%s', '%s', '%s')",email,content,image,date);
+			String sql = String.format("INSERT "
+					+ "INTO post (email, content, image, date) "
+					+ "VALUES ('%s', '%s', '%s', '%s')",email,content,image,date);
 			smt = conn.createStatement();
 			smt.executeUpdate(sql);
 						
@@ -163,7 +178,9 @@ public class PostDBUtil {
 		try {
 			conn = this.datasource.getConnection();
 			
-			String sql = "DELETE FROM post WHERE id=?";
+			String sql = "DELETE "
+					+ "FROM post "
+					+ "WHERE id=?";
 
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, id);
@@ -184,7 +201,9 @@ public class PostDBUtil {
 		try {
 			conn = this.datasource.getConnection();
 			
-			String sql = String.format("INSERT INTO likes (uemail,postid) VALUES ('%s','%s')",uemail,postid);
+			String sql = String.format("INSERT "
+					+ "INTO likes (uemail,postid) "
+					+ "VALUES ('%s','%s')",uemail,postid);
 			smt = conn.createStatement();
 			smt.executeUpdate(sql);
 						
@@ -204,7 +223,9 @@ public class PostDBUtil {
 		try {
 			conn = this.datasource.getConnection();
 			
-			String sql = String.format("DELETE FROM likes WHERE uemail = ? AND postid = ?");
+			String sql = String.format("DELETE "
+					+ "FROM likes "
+					+ "WHERE uemail = ? AND postid = ?");
 			
 			pstmt = conn.prepareStatement(sql);
 			
@@ -228,8 +249,9 @@ public class PostDBUtil {
 		try {
 			conn = this.datasource.getConnection();
 			
-			String sql = String.format("INSERT INTO savedposts (uemail, postid)"
-					+ " VALUES('%s','%d')",uemail,Integer.parseInt(id));
+			String sql = String.format("INSERT "
+					+ "INTO savedposts (uemail, postid) "
+					+ "VALUES('%s','%d')",uemail,Integer.parseInt(id));
 			
 			smt = conn.createStatement();
 			smt.executeUpdate(sql);
@@ -240,13 +262,34 @@ public class PostDBUtil {
 	}
 	
 	
-	
+	//	REMOVE SAVED POST
+	public void removeSavedPost(String id, String uemail) throws Exception{
+		Connection conn = null;
+		Statement smt = null;
+		PreparedStatement pstmt = null;
+		ResultSet res = null;
+		
+		try {
+			conn = this.datasource.getConnection();
+			
+			String sql = "DELETE "
+					+ "FROM savedposts "
+					+ "WHERE postid=? AND uemail=?";
+
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setInt(1, Integer.parseInt(id));
+			pstmt.setString(2, uemail);
+			pstmt.executeUpdate();
+		}
+		finally {
+			close(conn,smt,pstmt,res);
+		}
+	}	
 	
 	
 	// CLOSE THE CONNECTION
 	private void close(Connection conn, Statement smt, PreparedStatement pstmt, ResultSet res) {
-		try {
-			
+		try {	
 			if(conn != null) {
 				conn.close();
 			}
@@ -259,10 +302,8 @@ public class PostDBUtil {
 			if(res != null) {
 				res.close();
 			}
-			
 		}catch(Exception ex) {
 			ex.printStackTrace();
 		}
 	}
-
 }

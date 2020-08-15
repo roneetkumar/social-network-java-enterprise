@@ -9,13 +9,15 @@ public class Post {
     private String content;
     private String image;
     private String likes;
+    private String username;
     private String email;
     private String date;
     
-    public Post(String postId, String email, String content, String image, String date,String likes) {
+    public Post(String postId, String username, String email, String content, String image, String date, String likes) {
     	this.postId = postId;
     	this.content = content;
 		this.image = image;
+		this.username = username;
 		this.email = email;
 		this.date = date;
 		this.likes = likes;
@@ -68,6 +70,14 @@ public class Post {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+	
+	public String getUsername() {
+		return this.username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
 	public String getDate() {

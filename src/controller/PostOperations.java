@@ -62,6 +62,7 @@ public class PostOperations extends HttpServlet {
 		String like = request.getParameter("like");
 		String page = request.getParameter("page");
 		String save = request.getParameter("save");
+		String removeSaved = request.getParameter("removeSaved");
 
 		boolean done = false;
 		
@@ -79,6 +80,10 @@ public class PostOperations extends HttpServlet {
 		
 		if(save != null) {
 			done = user.savePost(save, postdb);
+		}
+		
+		if(removeSaved != null) {
+			done = user.removeSavedPost(removeSaved, postdb);
 		}
 	
 		if(done) {			

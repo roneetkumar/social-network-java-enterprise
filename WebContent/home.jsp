@@ -22,6 +22,17 @@
 <script defer src="./script/index.js"></script>
 </head>
 <body>
+	<!-- error -->
+	<span style="display:none" class="error">${msg}</span>
+	<tag:if test="${msg != null}">
+		<script>	
+				document.querySelector('.error').style.display = 'block';						
+				setTimeout(function() {
+					document.querySelector('.error').style.display = 'none';
+				}, 2000);
+		</script>
+	</tag:if>	
+	
 	<header>
 		<h1 class="main-heading">Home Page</h1>
 		
@@ -61,10 +72,7 @@
 		<button type="submit" name="createPost">Create</button>	
 		<button type="reset">Clear</button>	
 		<br>
-		<br>
-		<tag:if test="${msg != null}">
-			<span class="error">${msg}</span>
-		</tag:if>		
+		<br>	
 	</form>
 	<br><br>
 	<tag:if test="${allPosts.size() > 0}">
@@ -77,6 +85,7 @@
 	<div class="posts">
 		<tag:forEach var="post" items="${allPosts}">
 			<div class="post">
+				<span>${post.getUsername()}<br></span>
 				<span>${post.getDate()}<br></span>
 				<p>${post.getContent()}<br></p>
 				<img src="${post.getImage()}" alt=""/>
@@ -84,13 +93,10 @@
 					<tag:if test="${post.getEmail() == user.getEmail()}">
 						<button type="submit" value="${post.getPostId()}" name="edit">Edit</button>
 					</tag:if>	
-						
-					<button type="submit" value="${post.getPostId()}" name="like" >Like ${post.likes}</button>
-					
+					<button type="submit" value="${post.getPostId()}" name="like" >Like ${post.getLikes()}</button>
 					<tag:if test="${post.getEmail() != user.getEmail()}">
 						<button type="submit" value="${post.getPostId()}" name="save">Save</button>
 					</tag:if>
-					
 					<tag:if test="${post.getEmail() == user.getEmail()}">
 						<button type="submit" value="${post.getPostId()}" name="del" >Delete</button>
 					</tag:if>
