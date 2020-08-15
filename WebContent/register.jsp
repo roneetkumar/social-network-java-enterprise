@@ -12,6 +12,20 @@
 </head>
 
 <body>
+
+	<!-- error -->
+	<span style="display:none" class="error">${error}</span>
+	
+	<tag:if test="${error != null}">
+		<script>	
+				document.querySelector('.error').style.display = 'block';						
+				setTimeout(function() {
+					document.querySelector('.error').style.display = 'none';
+				}, 2000);
+		</script>
+	</tag:if>
+	
+
 	<header>
 		<h1 class="main-heading">Register</h1>
 	</header>
@@ -24,9 +38,6 @@
 		<button type="submit">Register</button> &nbsp; <button type="reset">Clear</button><br><br>
 		<a href="index.jsp">Back</a>
 		<br><br>
-		<tag:if test="${RegisterError}">
-			<span class="error">Error while creating account</span>
-		</tag:if>
 	</form>
 
 </body>

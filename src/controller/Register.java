@@ -72,7 +72,7 @@ public class Register extends HttpServlet {
 			response.sendRedirect("profile.jsp");
 		}else {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("register.jsp");
-			request.setAttribute("RegisterError", true);
+			request.setAttribute("error", "can't create account, please try later");
 			dispatcher.forward(request, response);	
 		}
 	}

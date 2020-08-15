@@ -71,7 +71,7 @@ public class Login extends HttpServlet {
 		}else {
 			RequestDispatcher dispatcher = request.getRequestDispatcher("login.jsp");
 			request.setAttribute("error", "incorrect email or password");
-			dispatcher.forward(request, response);	
+			dispatcher.forward(request, response);
 		}
 	}
 

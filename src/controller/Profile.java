@@ -68,15 +68,12 @@ public class Profile extends HttpServlet {
 			userdb.getRequests(user);
 			
 			//UPDATE SESSION
-			session.setAttribute("user", user);	
-			
+			session.setAttribute("user", user);		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}finally {		
-			RequestDispatcher dispatcher = request.getRequestDispatcher("profile.jsp");
-			dispatcher.forward(request, response);
+			response.sendRedirect("profile.jsp");
 		}
-
 	}
 
 	/**
