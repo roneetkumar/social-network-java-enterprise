@@ -12,8 +12,6 @@
 <link rel="stylesheet" href="./css/index.css">
 </head>
 <body>
-
-
 	<!-- error -->
 	<span style="display:none" class="error">${error}</span>
 	

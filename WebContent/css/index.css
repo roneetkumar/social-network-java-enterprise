@@ -64,7 +64,8 @@ nav{
 }
 
 .home-form{
-	width: 440px
+	width: 440px;
+	margin: auto;
 }
 
 
@@ -110,7 +111,7 @@ button{
 	z-index:10;
 }
 
-form{
+.main-grid form{
 	width: max-content;
 	margin: auto
 }
@@ -154,7 +155,8 @@ form{
 }
 
 .post form{
-	margin-bottom: 4px
+	margin-bottom: 4px;
+	text-align: center;
 }
 
 
@@ -253,6 +255,83 @@ form{
 	width: 300px;
 	min-height: 50%;
 }
+
+.messages-wrapper{
+	width: 400px;
+	display: grid;
+	height: 100vh;
+	grid-template-rows: 1fr 60px;
+	background : #ff8a65;
+	margin: auto;
+	padding: 20px;
+	box-sizing: border-box;
+}
+
+
+.messages{
+	width: 100%;
+	height: 100%;
+
+}
+
+
+.messages-wrapper form{
+	width: 100%;
+	height: 100%;
+	border-radius: 4px;
+	display: grid;
+	grid-template-columns: 1fr 100px;
+	grid-gap: 10px;
+
+}
+
+
+.messages-wrapper form textarea{
+	height: auto;
+}
+
+.messages-wrapper form button{
+	
+}
+
+
+.message{
+	font-size: 14px;
+    width: max-content;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 2px 3px rgba(0,0,0,0.1);
+    max-width: 50%;
+    
+    border-radius: 4px;
+}
+
+
+.message .value{
+	font-size: 22px;
+}
+
+
+.to,.from{
+	width: 100%;
+	min-height: 50px;
+	margin-bottom: 10px;
+	display: flex;
+}
+
+
+.to{
+	justify-content: flex-start;
+}
+
+.from{
+	justify-content: flex-end;
+}
+
+
+
+
+
 
 
 @media screen and (max-width: 1230px){

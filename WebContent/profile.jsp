@@ -59,9 +59,12 @@
 				<h1>${friend.getFname()} ${friend.getLname()}</h1>
 				<form action="FriendOperation" method="GET">
 					<button type="submit" value="${friend.getEmail()}" name="view">View</button>
-					<button type="submit" value="${friend.getEmail()}" name="message">Message</button>
 					<button type="submit" value="${friend.getEmail()}" name="remove">Remove</button>
 				</form>
+				<form action="Messenger" method="GET">
+					<button type="submit" value="${friend.getEmail()}" name="message">Message</button>
+				</form>
+				
 			</div>
 		</tag:forEach>
 	</div>
@@ -96,7 +99,7 @@
 					<p>${post.getContent()}<br></p>
 					<img src="${post.getImage()}" alt=""/>
 					<form action="PostOperations" method="GET">
-					<button type="submit" value="${post.getPostId()}" name="edit">Edit</button>
+						<button type="submit" value="${post.getPostId()}" name="edit">Edit</button>
 						<button type="submit" value="${post.getPostId()}" name="like">Like ${post.getLikes()}</button>
 						<button type="submit" value="${post.getPostId()}" name="del">Delete</button>
 						<input type="hidden" value="Profile" name="page">

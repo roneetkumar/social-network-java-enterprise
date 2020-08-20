@@ -2,6 +2,7 @@ package model;
 
 import java.util.ArrayList;
 
+import db.MessageDBUtil;
 import db.PostDBUtil;
 import db.UserDBUtil;
 
@@ -12,6 +13,7 @@ public class User {
 	private String pass;
 	
 	private ArrayList<User> friends  = new ArrayList<>();
+	private ArrayList<Message> messages  = new ArrayList<>();
 	private ArrayList<Post> posts  = new ArrayList<>();
 	private ArrayList<Post> savedposts  = new ArrayList<>();
 	private ArrayList<User> requests  = new ArrayList<>();
@@ -93,6 +95,14 @@ public class User {
 		this.requests = requests;
 	}
 	
+	public ArrayList<Message> getMessages() {
+		return this.messages;
+	}
+
+	public void setMessages(ArrayList<Message> messages) {
+		this.messages = messages;
+	}
+
 	public boolean delPost(String id, PostDBUtil postdb) {
 		
 		try {
@@ -145,6 +155,21 @@ public class User {
 	public boolean editPost(String id, PostDBUtil postdb) {
 		return true;
 	}
+	
+	public boolean sendMessage(String fEmail, String message, MessageDBUtil messagedb) {
+		Message tempMsg = new Message(this.email,fEmail,message);
+		
+		try {
+			messagedb.insertMessage(tempMsg);
+			return true;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	
 	
 	
 	// Custom Methods
